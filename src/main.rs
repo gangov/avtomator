@@ -3,15 +3,22 @@ use std::io::{BufRead, BufReader};
 use std::path::{Path, PathBuf};
 use std::process::{Command, Stdio};
 use rayon::prelude::*;
-
-const REPOS: &'static [&str] = &["https://github.com/sqshq/piggymetrics",
-    "https://github.com/spring-projects/spring-petclinic",
-    "https://github.com/Yoh0xFF/java-spring-security-example",
-    "https://github.com/mertakdut/Spring-Boot-Sample-Project"];
+use dialoguer::MultiSelect;
 
 fn main() {
     env::set_var("RUST_BACKTRACE", "1");
     let home_folder = Path::new("/Users/gangov");
+    let repos = vec!["https://github.com/sqshq/piggymetrics",
+                     "https://github.com/spring-projects/spring-petclinic",
+                     "https://github.com/Yoh0xFF/java-spring-security-example",
+                     "https://github.com/mertakdut/Spring-Boot-Sample-Project"];
+
+    let selection = MultiSelect::new()
+      .items(&repos)
+      .interact()
+      .expect("cannot multiselect");
+
+    println!("{:?}", selection);
 
     println!("Enter new folder name: ");
     let mut new_folder_name = String::new();
@@ -23,11 +30,11 @@ fn main() {
       .output()
       .expect("Err creating folder");
 
-    let target_dir = std::fs::canonicalize(Path::new(home_folder)
+    let target_dir = fs::canonicalize(Path::new(home_folder)
       .join(new_folder_name.trim()))
       .expect("cannot create folder");
 
-    REPOS
+    repos
       .par_iter()
       .for_each(|repo| {
           let threaded_target_dir = target_dir.clone();
@@ -78,7 +85,7 @@ fn clone_repo(target_dir: &PathBuf, repo: &&str) {
         let stdout_lines = stdout_reader.lines();
 
         for line in stdout_lines {
-            println!("Read: {:?}", line);
+            println!("Read: {:?}", line.unwrap());
         }
     }
 
