@@ -18,7 +18,8 @@ Prerequisites
     Build the project: cargo build
 
 ## Usage
-
+    
+    Edit the pathz.rs/set_git_repos() method
     Run the program: cargo run
 
 ### This will prompt you to select the git repositories you want to clone, and give a new folder name to clone the repositories in.
