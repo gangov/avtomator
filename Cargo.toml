@@ -8,3 +8,4 @@ edition = "2021"
 [dependencies]
 rayon = "1.6"
 dialoguer = {version = "0.10.3", features = ["fuzzy-select"]}
+directories = "4.0.1"
